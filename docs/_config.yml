@@ -1,0 +1,35 @@
+title: Echo Show を Stream Deck にする
+description: Amazon Echo Show 5 (第2世代) を root 化し、Bitfocus Companion の物理コントロールパネルとして運用するための手順書
+lang: ja
+
+# GitHub Pages (project site) - リポジトリ名を変えたら baseurl も変えること
+url: "https://manato003.github.io"
+baseurl: "/echo-show-streamdeck"
+
+# docs/02-prerequisites.md -> /echo-show-streamdeck/02-prerequisites/
+permalink: pretty
+
+remote_theme: just-the-docs/just-the-docs
+
+plugins:
+  - jekyll-remote-theme
+
+color_scheme: dark
+search_enabled: true
+heading_anchors: true
+
+aux_links:
+  "GitHub リポジトリ":
+    - "https://github.com/manato003/echo-show-streamdeck"
+
+nav_external_links:
+  - title: Bitfocus Companion
+    url: https://bitfocus.io/companion
+  - title: Fully Kiosk Browser
+    url: https://www.fully-kiosk.com/
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+
+footer_content: "この手順書はメーカー非公認の改造手順です。自己責任でご利用ください。"
