@@ -1,15 +1,17 @@
-# Local credentials (copy switchbot_secrets.example.ps1 to create)
-switchbot_secrets.ps1
+# Local credentials (copy config/switchbot_secrets.example.ps1 to create).
+# Paths are anchored on purpose: Windows git matches case-insensitively, and a bare
+# "config.ps1" pattern also ignored scripts/lib/Config.ps1.
+/config/switchbot_secrets.ps1
 
-# Local environment settings (copy config.example.ps1 to create)
-config.ps1
+# Local environment settings (copy config/config.example.ps1 to create)
+/config/config.ps1
 
 # Author's private notes (e.g. MANUAL.md, the original build log with real IPs,
 # paths and device ids). The shareable version lives in docs/.
-private/
+/private/
 
 # Runtime state written by the toggle scripts
-state/
+/state/
 
 # Jekyll build output (docs site)
 docs/_site/

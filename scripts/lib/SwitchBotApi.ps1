@@ -1,10 +1,10 @@
 # SwitchBot OpenAPI v1.1 helper (HMAC-SHA256 request signing).
 
-# Credentials live in switchbot_secrets.ps1, which git ignores. Copy
-# switchbot_secrets.example.ps1 to create it.
-$secretsFile = Join-Path (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path "switchbot_secrets.ps1"
+# Credentials live in config/switchbot_secrets.ps1, which git ignores. Copy
+# config/switchbot_secrets.example.ps1 to create it.
+$secretsFile = Join-Path (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path "config\switchbot_secrets.ps1"
 if (-not (Test-Path $secretsFile)) {
-    throw "Missing $secretsFile. Copy switchbot_secrets.example.ps1 and fill in your SwitchBot token and secret."
+    throw "Missing $secretsFile. Copy config\switchbot_secrets.example.ps1 and fill in your SwitchBot token and secret."
 }
 . $secretsFile
 

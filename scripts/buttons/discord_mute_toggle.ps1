@@ -6,8 +6,8 @@
 # Discord's "Toggle Mute" hotkey is registered as "RIGHT CTRL + KANAMOJI",
 # which is the OEM_5 key (\ on US layout, Yen on JIS layout) - not VK_KANA.
 
-# Loads config.ps1 from the repository root (see scripts/lib/Config.ps1).
-. "$PSScriptRoot\..\lib\Config.ps1"
+# Loads config/config.ps1 (see scripts/lib/LoadConfig.ps1).
+. "$PSScriptRoot\..\lib\LoadConfig.ps1"
 
 Add-Type -TypeDefinition @"
 using System;

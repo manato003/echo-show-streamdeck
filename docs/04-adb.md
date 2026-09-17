@@ -146,7 +146,7 @@ start adbd
 
 ### PC 側スクリプトの接続先を切り替える
 
-`config.ps1` の `$EchoShowAdbTarget` を書き換えるだけで、`restart_echoshow_kiosk.ps1` が Wi-Fi 経由で動きます
+`config/config.ps1` の `$EchoShowAdbTarget` を書き換えるだけで、`restart_echoshow_kiosk.ps1` が Wi-Fi 経由で動きます
 （`IP:ポート` の形なら、スクリプトが自動で `adb connect` します）。
 
 ```powershell

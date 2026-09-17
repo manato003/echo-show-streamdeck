@@ -31,11 +31,10 @@
 ## リポジトリの中身
 
 ```
-├── config.example.ps1             環境設定のテンプレート（→ config.ps1）
-├── switchbot_secrets.example.ps1  SwitchBot 認証情報のテンプレート
+├── config/            設定（*.example.ps1 をコピーして使う。実ファイルは git 対象外）
 ├── scripts/
 │   ├── buttons/       Companion のボタンから呼ぶ PowerShell スクリプト
-│   ├── lib/           共通部品（Config.ps1 / SendKeyCombo.ps1 / SwitchBot API など）
+│   ├── lib/           共通部品（LoadConfig.ps1 / SendKeyCombo.ps1 / SwitchBot API など）
 │   └── maintenance/   Echo Show の復旧・温湿度の定期更新
 ├── echo-show/         Echo Show の /data/adb/ に置く Magisk 起動スクリプト
 ├── icons/             自作のボタン用アイコン
@@ -52,15 +51,15 @@ git clone https://github.com/manato003/echo-show-streamdeck.git
 cd echo-show-streamdeck
 
 # 1. 環境設定（必須）
-Copy-Item config.example.ps1 config.ps1
-# → config.ps1 に Companion の IP・エミュレーター ID・adb.exe のパスなどを記入
+Copy-Item config\config.example.ps1 config\config.ps1
+# → config\config.ps1 に Companion の IP・エミュレーター ID・adb.exe のパスなどを記入
 
 # 2. SwitchBot を使う場合のみ
-Copy-Item switchbot_secrets.example.ps1 switchbot_secrets.ps1
-# → switchbot_secrets.ps1 にトークンとシークレットを記入
+Copy-Item config\switchbot_secrets.example.ps1 config\switchbot_secrets.ps1
+# → config\switchbot_secrets.ps1 にトークンとシークレットを記入
 ```
 
-`config.ps1` と `switchbot_secrets.ps1` は `.gitignore` 済みです。
+`config/config.ps1` と `config/switchbot_secrets.ps1` は `.gitignore` 済みです。
 **環境依存の値はすべてこの 2 ファイルに集約されているので、各スクリプトを編集する必要はありません。**
 
 Companion のボタンには次の形式でコマンドを設定します。
@@ -78,7 +77,7 @@ powershell.exe -ExecutionPolicy Bypass -File "C:\path\to\echo-show-streamdeck\sc
 ## 🔒 自分の環境の値について
 
 このリポジトリには**作者の環境固有の値は含まれていません。** 環境依存の値はすべて
-`config.ps1` / `switchbot_secrets.ps1`（どちらも `.gitignore` 済み）に分離されています。
+`config/config.ps1` / `config/switchbot_secrets.ps1`（どちらも `.gitignore` 済み）に分離されています。
 
 フォークして公開する場合も、この 2 ファイルをコミットしなければ安全です。
 `docs/` 配下は `<PC_IP>` / `<ECHO_IP>` / `<EMULATOR_ID>` / `<REPO>` のプレースホルダで書かれています。

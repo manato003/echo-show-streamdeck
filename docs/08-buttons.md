@@ -65,7 +65,7 @@ Content-Type: text/plain
 Body: 0 または 1
 ```
 
-スクリプト側では、`config.ps1` が提供する共通関数を呼ぶだけです。
+スクリプト側では、`scripts/lib/LoadConfig.ps1` が提供する共通関数を呼ぶだけです。
 
 ```powershell
 Set-CompanionVariable -Name "light_on" -Value $newState
@@ -156,7 +156,7 @@ Discord のアンチ自動化挙動と思われます（`LLKHF_INJECTED` フラ�
 
 ### 認証情報の設定
 
-`switchbot_secrets.example.ps1` を `switchbot_secrets.ps1` にコピーし、自分の値を入れます。
+`config/switchbot_secrets.example.ps1` を `config/switchbot_secrets.ps1` にコピーし、自分の値を入れます。
 
 ```powershell
 $SwitchBotToken  = "YOUR_SWITCHBOT_TOKEN"
@@ -167,7 +167,7 @@ $SwitchBotSecret = "YOUR_SWITCHBOT_SECRET"
 **SwitchBot アプリ → プロフィール → 設定 → 「アプリバージョン」を 10 回タップ → 開発者オプション**
 
 {: .warning }
-> ⚠️ **`switchbot_secrets.ps1` は `.gitignore` 済みです。絶対にコミットしないでください。**
+> ⚠️ **`config/switchbot_secrets.ps1` は `.gitignore` 済みです。絶対にコミットしないでください。**
 
 ### デバイス ID を調べる
 
@@ -177,7 +177,7 @@ Get-SwitchBotDevices | ConvertTo-Json -Depth 5
 ```
 
 返ってきた `deviceId`（物理デバイス）または `infraredRemoteList` の中の `deviceId`（赤外線リモコン）を
-**`config.ps1`** の `$SwitchBotLightDeviceId` / `$SwitchBotMeterDeviceId` に設定します。
+**`config/config.ps1`** の `$SwitchBotLightDeviceId` / `$SwitchBotMeterDeviceId` に設定します。
 
 ### 照明トグル（`light_toggle.ps1`）
 
@@ -185,7 +185,7 @@ Get-SwitchBotDevices | ConvertTo-Json -Depth 5
 **赤外線には状態を問い合わせる手段がない**ため、Discord ミュートと同じくローカルで状態を仮定し
 （`state/light_state.txt`）、Companion のカスタム変数 `light_on` に反映しています。
 
-デバイス ID は `config.ps1` の `$SwitchBotLightDeviceId` から読まれます。
+デバイス ID は `config/config.ps1` の `$SwitchBotLightDeviceId` から読まれます。
 
 ### 温湿度の表示（`update_switchbot_status.ps1`）
 

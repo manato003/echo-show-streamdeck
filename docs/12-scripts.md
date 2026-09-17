@@ -9,8 +9,8 @@ nav_order: 12
 
 ```
 companion-pc-tools/
-├── config.example.ps1            環境設定のテンプレート → config.ps1 にコピー
-├── switchbot_secrets.example.ps1 SwitchBot 認証情報のテンプレート → switchbot_secrets.ps1 にコピー
+├── README.md / LICENSE
+├── config/            設定（*.example.ps1 をコピーして使う）
 ├── scripts/
 │   ├── buttons/       Companion のボタンから呼ぶスクリプト
 │   ├── lib/           共通部品（ボタンに直接割り当てない）
@@ -24,7 +24,7 @@ companion-pc-tools/
 └── private/           個人メモ（git 対象外）
 ```
 
-## 12.1 設定ファイル（リポジトリ直下）
+## 12.1 `config/` — 設定ファイル
 
 | ファイル | 用途 |
 |---|---|
@@ -63,7 +63,7 @@ powershell.exe -ExecutionPolicy Bypass -File "<REPO>\scripts\buttons\<ファイ�
 
 | ファイル | 用途 |
 |---|---|
-| `Config.ps1` | **全スクリプトの起点**。リポジトリ直下の `config.ps1` を読み込み、`$RepoRoot` / `$LibDir` / `$StateDir` / `$CompanionBaseUrl` / `$CompanionEmulatorUrl` と、カスタム変数を更新する `Set-CompanionVariable` を定義する。各スクリプトは `. "$PSScriptRoot\..\lib\Config.ps1"` で読み込む |
+| `LoadConfig.ps1` | **全スクリプトの起点**。`config/config.ps1` を読み込み、`$RepoRoot` / `$LibDir` / `$StateDir` / `$CompanionBaseUrl` / `$CompanionEmulatorUrl` と、カスタム変数を更新する `Set-CompanionVariable` を定義する。各スクリプトは `. "$PSScriptRoot\..\lib\LoadConfig.ps1"` で読み込む |
 | `SendKeyCombo.ps1` | グローバルなキーコンボ送信（`keybd_event` ベース）。右側モディファイア／ナビゲーションキーに `KEYEVENTF_EXTENDEDKEY` を自動付与する（→ [10 章]({{ site.baseurl }}/10-troubleshooting/#extended-key)） |
 | `AudioMuteHelper.ps1` | Core Audio API の COM interop ヘルパー。`[AudioMute]` クラスに `IsMuted` / `SetMuted` の静的メソッド |
 | `SwitchBotApi.ps1` | SwitchBot OpenAPI v1.1 のヘルパー（HMAC-SHA256 署名）。`Get-SwitchBotAuthHeaders` / `Get-SwitchBotDevices` / `Get-SwitchBotStatus` |
@@ -73,7 +73,7 @@ powershell.exe -ExecutionPolicy Bypass -File "<REPO>\scripts\buttons\<ファイ�
 
 | ファイル | 用途 |
 |---|---|
-| `restart_echoshow_kiosk.ps1` | PC から ADB 経由で Fully Kiosk を強制再起動。接続先は `config.ps1` の `$EchoShowAdbTarget`（USB のシリアル番号、または Wi-Fi の `IP:5555`） |
+| `restart_echoshow_kiosk.ps1` | PC から ADB 経由で Fully Kiosk を強制再起動。接続先は `config/config.ps1` の `$EchoShowAdbTarget`（USB のシリアル番号、または Wi-Fi の `IP:5555`） |
 | `restart_echoshow_kiosk.bat` | 上記をダブルクリックで実行するためのランチャー |
 | `update_switchbot_status.ps1` | SwitchBot 温湿度計の値を Companion のカスタム変数に POST。タスクスケジューラから定期実行する |
 | `run_hidden_switchbot.vbs` | 上記をコンソールウィンドウなしで起動するためのラッパー（パスは自動解決）。**タスクスケジューラにはこれを登録する** |

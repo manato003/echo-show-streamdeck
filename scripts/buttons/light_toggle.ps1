@@ -1,8 +1,8 @@
 # Toggle the room light via SwitchBot IR remote. State is tracked locally
 # (IR remotes have no feedback/queryable status), and pushed to a Companion
 # custom variable so a button can reflect it.
-# Loads config.ps1 from the repository root (see scripts/lib/Config.ps1).
-. "$PSScriptRoot\..\lib\Config.ps1"
+# Loads config/config.ps1 (see scripts/lib/LoadConfig.ps1).
+. "$PSScriptRoot\..\lib\LoadConfig.ps1"
 
 $deviceId = $SwitchBotLightDeviceId
 $stateFile = Join-Path $StateDir "light_state.txt"

@@ -95,14 +95,14 @@ powershell.exe -ExecutionPolicy Bypass -File "<REPO>\scripts\buttons\<script>.ps
 
 どのスクリプトをどのボタンに割り当てるかは [8 章]({{ site.baseurl }}/08-buttons/) を参照してください。
 
-## 7.6 config.ps1 を用意する {#config}
+## 7.6 config/config.ps1 を用意する {#config}
 
 スクリプトが使う環境依存の値（Companion の IP、エミュレーター ID、ADB のパス、
 SwitchBot のデバイス ID）は **1 つのファイルに集約**されています。
-`config.example.ps1` をコピーして `config.ps1` を作り、自分の値を書いてください。
+`config/config.example.ps1` をコピーして `config/config.ps1` を作り、自分の値を書いてください。
 
 ```powershell
-Copy-Item config.example.ps1 config.ps1
+Copy-Item config\config.example.ps1 config\config.ps1
 ```
 
 ```powershell
@@ -118,11 +118,11 @@ $SwitchBotMeterDeviceId = "..."
 ```
 
 {: .highlight }
-> 💡 `config.ps1` は `.gitignore` 済みです。
+> 💡 `config/config.ps1` は `.gitignore` 済みです。
 > **各スクリプトを直接編集する必要はありません。** 環境が変わったらこのファイルだけ直します。
 
-`config.ps1` は `scripts/lib/Config.ps1` から読み込まれます。`Config.ps1` はあわせて、Companion のカスタム変数を更新する共通関数
+`config/config.ps1` は `scripts/lib/LoadConfig.ps1` から読み込まれます。`LoadConfig.ps1` はあわせて、Companion のカスタム変数を更新する共通関数
 `Set-CompanionVariable` も提供します（→ [8.4]({{ site.baseurl }}/08-buttons/#feedback-variables)）。
 
 認証情報（SwitchBot のトークン等）は `config.ps1` ではなく
-**`switchbot_secrets.ps1`** に分けて置きます（→ [8.6]({{ site.baseurl }}/08-buttons/#switchbot)）。
+**`config/switchbot_secrets.ps1`** に分けて置きます（→ [8.6]({{ site.baseurl }}/08-buttons/#switchbot)）。

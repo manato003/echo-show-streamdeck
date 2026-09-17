@@ -1,8 +1,8 @@
 # Force Fully Kiosk on the Echo Show back to the Companion button page.
 # Use this when the display is stuck on the wrong page.
 
-# Loads config.ps1 from the repository root (see scripts/lib/Config.ps1).
-. "$PSScriptRoot\..\lib\Config.ps1"
+# Loads config/config.ps1 (see scripts/lib/LoadConfig.ps1).
+. "$PSScriptRoot\..\lib\LoadConfig.ps1"
 
 if (-not (Test-Path $AdbPath)) {
     throw "adb.exe not found at '$AdbPath'. Fix `$AdbPath in config.ps1."

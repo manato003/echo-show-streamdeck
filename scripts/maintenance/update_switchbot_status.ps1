@@ -1,6 +1,6 @@
 # Fetch temperature/humidity from the SwitchBot Meter and push to Companion custom variables.
-# Loads config.ps1 from the repository root (see scripts/lib/Config.ps1).
-. "$PSScriptRoot\..\lib\Config.ps1"
+# Loads config/config.ps1 (see scripts/lib/LoadConfig.ps1).
+. "$PSScriptRoot\..\lib\LoadConfig.ps1"
 . "$LibDir\SwitchBotApi.ps1"
 
 $deviceId = $SwitchBotMeterDeviceId

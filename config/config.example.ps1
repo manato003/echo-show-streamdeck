@@ -1,7 +1,7 @@
-# Environment-specific settings. Copy this file to config.ps1 and edit it.
+# Environment-specific settings. Copy this file to config/config.ps1 and edit it.
 # config.ps1 is git-ignored, so your values never get committed.
 #
-# Nothing secret belongs here - API credentials go in switchbot_secrets.ps1.
+# Nothing secret belongs here - API credentials go in config/switchbot_secrets.ps1.
 
 # --- Bitfocus Companion (the PC running Companion) ---------------------------
 # Use the LAN IP, NOT 127.0.0.1: Companion's web server binds to the LAN
