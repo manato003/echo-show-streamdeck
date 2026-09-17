@@ -63,9 +63,9 @@ chmod 755 /data/adb/service.d/launch_fully.sh
 
 表示がおかしくなったときに、PC から Fully Kiosk を叩き直すスクリプトを用意してあります。
 
-- `restart_echoshow_kiosk.ps1` — 本体（ADB で force-stop → 正しい URL で再起動）
-- `restart_echoshow_kiosk.bat` — ダブルクリック用のランチャー
+- `scripts/maintenance/restart_echoshow_kiosk.ps1` — 本体（ADB で force-stop → 正しい URL で再起動）
+- `scripts/maintenance/restart_echoshow_kiosk.bat` — ダブルクリック用のランチャー
 
 **設定は [`config.ps1`]({{ site.baseurl }}/07-companion/#config) から読むので、
 スクリプト自体を編集する必要はありません。**
-`$AdbPath` / `$EchoShowIp` / `$CompanionEmulatorId` が正しく入っていれば動きます。
+`$AdbPath` / `$EchoShowAdbTarget` / `$CompanionEmulatorId` が正しく入っていれば動きます。

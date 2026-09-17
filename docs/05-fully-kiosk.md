@@ -12,7 +12,7 @@ Echo Show 側で「Companion のボタン画面を全画面表示し続ける」
 [fully-kiosk.com](https://www.fully-kiosk.com/) から APK をダウンロードし、サイドロードします。
 
 ```
-adb -s <ECHO_IP>:5555 install fully-kiosk.apk
+adb -s <ADB_SERIAL> install fully-kiosk.apk
 ```
 
 ## 5.2 設定

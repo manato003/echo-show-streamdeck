@@ -1,12 +1,7 @@
 # Fetch temperature/humidity from the SwitchBot Meter and push to Companion custom variables.
-# Environment-specific settings live in config.ps1 (git-ignored).
-# Copy config.example.ps1 to create it.
-$configFile = "$PSScriptRoot\config.ps1"
-if (-not (Test-Path $configFile)) {
-    throw "Missing $configFile. Copy config.example.ps1 and fill in your own values."
-}
-. $configFile
-. "$PSScriptRoot\SwitchBotApi.ps1"
+# Loads config.ps1 from the repository root (see scripts/lib/Config.ps1).
+. "$PSScriptRoot\..\lib\Config.ps1"
+. "$LibDir\SwitchBotApi.ps1"
 
 $deviceId = $SwitchBotMeterDeviceId
 $status = Get-SwitchBotStatus -DeviceId $deviceId

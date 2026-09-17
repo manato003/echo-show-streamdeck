@@ -35,7 +35,12 @@ Echo Show 側：
 | [Magisk](https://github.com/topjohnwu/Magisk) 30.x | root 管理・起動スクリプト実行 |
 | [Fully Kiosk Browser](https://www.fully-kiosk.com/) | 全画面ブラウザ（無料版で足りる → [11 章]({{ site.baseurl }}/11-limitations/)） |
 
-## 2.3 ネットワークの前提
+## 2.3 接続の前提
+
+- **Echo Show と PC を USB ケーブルでつなぎっぱなしにします。** 保守・復旧用の ADB は USB 経由で使います
+  （Wi-Fi ADB は認証なしになるため閉じます → [4 章]({{ site.baseurl }}/04-adb/)）。
+
+### ネットワーク
 
 - Echo Show と PC が **同一 LAN** にいること。
 - PC 側で **TCP 8000（Companion）** が LAN からアクセスできること。

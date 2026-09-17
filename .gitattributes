@@ -1,0 +1,5 @@
+# Android shell scripts must stay LF, or /system/bin/sh fails on them.
+*.sh  text eol=lf
+# cmd.exe misparses LF batch files; Windows Script Host expects CRLF too.
+*.bat text eol=crlf
+*.vbs text eol=crlf

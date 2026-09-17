@@ -6,13 +6,8 @@
 # Discord's "Toggle Mute" hotkey is registered as "RIGHT CTRL + KANAMOJI",
 # which is the OEM_5 key (\ on US layout, Yen on JIS layout) - not VK_KANA.
 
-# Environment-specific settings live in config.ps1 (git-ignored).
-# Copy config.example.ps1 to create it.
-$configFile = "$PSScriptRoot\config.ps1"
-if (-not (Test-Path $configFile)) {
-    throw "Missing $configFile. Copy config.example.ps1 and fill in your own values."
-}
-. $configFile
+# Loads config.ps1 from the repository root (see scripts/lib/Config.ps1).
+. "$PSScriptRoot\..\lib\Config.ps1"
 
 Add-Type -TypeDefinition @"
 using System;
@@ -43,7 +38,7 @@ $originalForeground = [Win32]::GetForegroundWindow()
 Start-Sleep -Milliseconds 400
 
 # Right Ctrl=163, OEM_5 (\/Yen)=220
-& "$PSScriptRoot\SendKeyCombo.ps1" -Keys "163,220"
+& "$LibDir\SendKeyCombo.ps1" -Keys "163,220"
 
 Start-Sleep -Milliseconds 200
 if ($originalForeground -ne [IntPtr]::Zero) {
@@ -52,7 +47,7 @@ if ($originalForeground -ne [IntPtr]::Zero) {
 
 # Track assumed mute state locally (Discord exposes no readable mute state),
 # and push it to Companion's custom variable so the button can show it.
-$stateFile = "$PSScriptRoot\discord_mute_state.txt"
+$stateFile = Join-Path $StateDir "discord_mute_state.txt"
 $current = if (Test-Path $stateFile) { Get-Content $stateFile -Raw } else { "0" }
 $newState = if ($current.Trim() -eq "1") { "0" } else { "1" }
 Set-Content -Path $stateFile -Value $newState -NoNewline

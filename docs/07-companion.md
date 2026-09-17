@@ -84,7 +84,7 @@ Echo Show 5 の画面は小さいので、既定の 4×8 では 1 ボタンが�
 Command に次の形式で入力します。
 
 ```
-powershell.exe -ExecutionPolicy Bypass -File "<REPO>\<script>.ps1"
+powershell.exe -ExecutionPolicy Bypass -File "<REPO>\scripts\buttons\<script>.ps1"
 ```
 
 `<REPO>` はこのリポジトリをクローンしたローカルパスです（例：`C:\Dev\projects\companion-pc-tools`）。
@@ -110,7 +110,7 @@ $CompanionHost = "<PC_IP>"          # 127.0.0.1 ではなく LAN の IP
 $CompanionPort = "8000"
 $CompanionEmulatorId = "<EMULATOR_ID>"
 
-$EchoShowIp = "<ECHO_IP>"
+$EchoShowAdbTarget = "<ADB_SERIAL>"  # USB。Wi-Fi ADB なら "<ECHO_IP>:5555"
 $AdbPath = "C:\platform-tools\adb.exe"
 
 $SwitchBotLightDeviceId = "..."     # SwitchBot を使う場合のみ
@@ -121,7 +121,7 @@ $SwitchBotMeterDeviceId = "..."
 > 💡 `config.ps1` は `.gitignore` 済みです。
 > **各スクリプトを直接編集する必要はありません。** 環境が変わったらこのファイルだけ直します。
 
-このファイルは、Companion のカスタム変数を更新する共通関数
+`config.ps1` は `scripts/lib/Config.ps1` から読み込まれます。`Config.ps1` はあわせて、Companion のカスタム変数を更新する共通関数
 `Set-CompanionVariable` も提供します（→ [8.4]({{ site.baseurl }}/08-buttons/#feedback-variables)）。
 
 認証情報（SwitchBot のトークン等）は `config.ps1` ではなく

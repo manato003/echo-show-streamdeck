@@ -2,5 +2,5 @@
 # This mutes the physical mic input system-wide (Discord and any other
 # app relying on the same input device will be muted too), and does not
 # depend on keyboard hooks or window focus.
-. "$PSScriptRoot\AudioMuteHelper.ps1"
+. "$PSScriptRoot\..\lib\AudioMuteHelper.ps1"
 [AudioMute]::SetMuted(-not [AudioMute]::IsMuted())

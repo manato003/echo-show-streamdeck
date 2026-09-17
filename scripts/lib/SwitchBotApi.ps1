@@ -2,7 +2,7 @@
 
 # Credentials live in switchbot_secrets.ps1, which git ignores. Copy
 # switchbot_secrets.example.ps1 to create it.
-$secretsFile = "$PSScriptRoot\switchbot_secrets.ps1"
+$secretsFile = Join-Path (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path "switchbot_secrets.ps1"
 if (-not (Test-Path $secretsFile)) {
     throw "Missing $secretsFile. Copy switchbot_secrets.example.ps1 and fill in your SwitchBot token and secret."
 }

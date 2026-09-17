@@ -17,15 +17,37 @@ nav_order: 10
 > これにより Magisk の boot フックと、`/system/build.prop` への直接編集
 > （`persist.service.adb.enable` や `ro.debuggable` など）が全て消えました。
 > ただし **`/data/adb/` 配下の Magisk 本体ファイルは別パーティションなので無傷**でした。
+>
+> **2026-09-15 に 6.5.7.3 → 6.5.7.4 で同じ事故が再発しました。** OTA を止めていなかったためです。
+> 再発防止として、この後の [OTA 自動更新を止める](#disable-ota) を必ず実施してください。
 
 ### 症状の連鎖（この順で気付く）
 
-1. Wi-Fi ADB（TCP 5555）が繋がらなくなる
-2. USB ADB も繋がらない。PC 上では ADB デバイスではなく **MTP / Fire の "WPD" デバイス**として認識される
+1. USB ADB が繋がらない。PC 上では ADB デバイスではなく **MTP / Fire の "WPD" デバイス**として認識される
+   （Wi-Fi ADB を使っている場合は、5555 番が接続拒否 10061 になる）
+2. 起動しても Fully Kiosk が自動で立ち上がらない
 3. 現行 boot パーティションに対して `magiskboot cpio ramdisk.cpio test` が
    **`0`（＝純正・未パッチ）** を返す（Magisk パッチ済みなら `1`）
 
+### OTA だったことを確かめる
+
+TWRP に入り（→ [3.2]({{ site.baseurl }}/03-rooting/)）、USB の ADB から次を確認します。
+
+```sh
+# /system のバージョンが上がっているか
+mkdir -p /mnt/sysro && mount -o ro -t ext4 /dev/block/platform/soc/by-name/system /mnt/sysro
+grep ro.build.version.name /mnt/sysro/build.prop
+
+# OTA 適用の痕跡（日時が分かる）
+ls -l /cache/recovery/        # block.map / intent / last_blocklist
+
+# /data/adb は無傷か
+ls -l /data/adb/post-fs-data.d /data/adb/service.d
+```
+
 ### 復旧手順
+
+作業はすべて TWRP の ADB シェル（root）で行います。
 
 ```sh
 # 1. 現行（純正）boot を吸い出す。パーティションはちょうど 16MB
@@ -36,16 +58,32 @@ dd if=/dev/block/mmcblk0p9 of=/sdcard/stock_boot.img bs=1048576 count=16
 吸い出したイメージは PC 側にもバックアップしておいてください。
 
 ```sh
-# 2. Magisk 自身の boot_patch.sh で再パッチ（そのディレクトリで実行する）
-cd /data/adb/magisk
-./boot_patch.sh /path/to/stock_boot_copy.img
+# 2. Magisk 自身の boot_patch.sh で再パッチ
+#    元のディレクトリを汚さないよう、作業用にコピーしてから実行する
+W=/data/local/tmp/recover; mkdir -p $W
+cp -a /data/adb/magisk $W/magisk && cd $W/magisk
+cp /sdcard/stock_boot.img to_patch.img
+sh ./boot_patch.sh $W/magisk/to_patch.img
 # → new-boot.img が生成される
+
+# パッチが入ったか確認（1 = Magisk パッチ済み）
+./magiskboot unpack new-boot.img && ./magiskboot cpio ramdisk.cpio test; echo $?
 ```
 
 ```sh
 # 3. サイズがパーティションサイズと一致することを必ず確認してから書き戻す
-dd if=new-boot.img of=/dev/block/mmcblk0p9
+#    （TWRP の busybox は stat -c が使えないので wc -c を使う）
+[ "$(wc -c < new-boot.img)" -eq "$(blockdev --getsize64 /dev/block/mmcblk0p9)" ] \
+  && dd if=new-boot.img of=/dev/block/mmcblk0p9 bs=1048576
+
+# 4. 読み戻して一致を確認してから再起動
+dd if=/dev/block/mmcblk0p9 of=readback.img bs=1048576 count=16
+sha1sum new-boot.img readback.img
 ```
+
+吸い出した純正 boot は PC にも `adb pull` で保存しておきます。
+Git Bash から `adb pull /data/...` を実行するとパスが書き換えられるので、
+先に `export MSYS_NO_PATHCONV=1` を実行してください。
 
 {: .warning }
 > ⚠️ **書き戻す前に必ずバイト単位でサイズを確認してください。**
@@ -57,8 +95,70 @@ dd if=new-boot.img of=/dev/block/mmcblk0p9
   OTA を跨いで生き残らせたい設定は、必ず Magisk の systemless な仕組み
   （`/data/adb/post-fs-data.d/` + `resetprop`）で行ってください（→ [4 章]({{ site.baseurl }}/04-adb/)）。
 - ⚠️ **しばらく普通に使っていて突然 ADB / root が死んだら、まず OTA を疑ってください。**
-- 🔶 **未対応**：OTA 自動更新そのものは無効化していません。同じ事故は再発しえます。
-  OTA を止めるべきか（止められるか）は宿題として残っています。
+- ⚠️ **OTA は止めない限り必ず再発します。** 実際に 2 回起きました。下の手順で止めてください。
+
+### OTA 自動更新を止める {#disable-ota}
+
+root が戻った状態（通常起動）で、Fire OS の更新アプリ 2 つを無効化します。
+
+| パッケージ | 役割 | 対応 |
+|---|---|---|
+| `com.amazon.device.software.ota` | Fire OS 本体の更新 | **無効化する** |
+| `com.amazon.device.software.ota.override` | アイドル時に更新を強制適用 | **無効化する** |
+| `com.amazon.dcp.contracts.library` | Amazon アプリ共通のライブラリ | 触らない（Alexa 等が壊れる恐れ） |
+| `com.amazon.device.smarthome.ota` | スマートホーム周辺機器のファームウェア | 触らない（Fire OS とは無関係） |
+
+PowerShell 5.1 はクォートを崩すので、**Git Bash** から実行します。
+
+```bash
+adb -s <ADB_SERIAL> shell 'su -c "pm disable com.amazon.device.software.ota; pm disable com.amazon.device.software.ota.override"'
+# Package ... new state: disabled が 2 行出れば成功
+```
+
+確認（root 不要。再起動後も無効のままであることを確かめる）：
+
+```bash
+adb -s <ADB_SERIAL> shell pm list packages -d | grep ota
+```
+
+元に戻すときは `disable` を `enable` にして実行します。
+
+{: .warning }
+> ⚠️ **`su` が応答しないまま止まる場合**は、下の
+> [Magisk アプリが簡易版（stub）のままだと su が止まる](#magisk-stub) を確認してください。
+
+---
+
+## Magisk アプリが簡易版（stub）のままだと su が止まる {#magisk-stub}
+
+**症状**：`adb shell su -c ...` を実行しても何も返ってこない。Echo Show の画面にも許可ダイアログが出ない。
+
+**原因**：boot を再パッチすると、Magisk アプリは**簡易版（stub）**として入ります。
+stub は root の許可ダイアログを表示できず、「フルバージョンにアップグレードしますか？」という
+案内だけを出します。Fully Kiosk が前面にいると、この案内も**裏に隠れて見えません**。
+
+**対処**：Magisk デーモンと**同じバージョン**の完全版 APK を入れます（root 不要）。
+
+```bash
+adb -s <ADB_SERIAL> install -r Magisk-v30.7.apk
+```
+
+その後、許可ダイアログが Fully Kiosk の裏に隠れないよう、Fully Kiosk を一時的に止めてから `su` を実行します。
+
+```bash
+adb -s <ADB_SERIAL> shell am force-stop de.ozerov.fully
+```
+
+{: .warning }
+> ⚠️ **許可ダイアログは約 10 秒で自動的に拒否され、その拒否が保存されます。**
+> 以降はダイアログが出ずに即座に拒否されます。
+> その場合は Magisk アプリを開き（`adb shell monkey -p com.topjohnwu.magisk -c android.intent.category.LAUNCHER 1`）、
+> **スーパーユーザー → Shell のスイッチを ON** にします。
+>
+> - アプリ起動時の「追加のセットアップが必要です」は **キャンセル**（OK を押すと boot の書き換えを始めようとする）
+> - ADB は認証なし（`ro.adb.secure=0`）なので、**作業が終わったら Shell のスイッチは OFF に戻す**
+
+作業が終わったら `scripts/maintenance/restart_echoshow_kiosk.ps1` で Fully Kiosk を戻します。
 
 ---
 
@@ -151,8 +251,8 @@ Discord は合成（injected）キーイベントを、非フォーカス時に�
 
 ## Discord ミュート / 照明のアイコン表示がずれる
 
-`discord_mute_toggle.ps1` は `discord_mute_state.txt` に、
-`light_toggle.ps1` は `light_state.txt` に `0`/`1` を書いて
+`discord_mute_toggle.ps1` は `state/discord_mute_state.txt` に、
+`light_toggle.ps1` は `state/light_state.txt` に `0`/`1` を書いて
 **ローカルで状態を仮定して管理**しています
 （Discord にも赤外線リモコンにも、現在の状態を問い合わせる手段が存在しないため）。
 

@@ -30,8 +30,20 @@
 
 ## リポジトリの中身
 
-このリポジトリには、Companion のボタンから呼び出す **PowerShell スクリプト**と
-**自作アイコン**が入っています。詳細は [12 章](docs/12-scripts.md) を参照してください。
+```
+├── config.example.ps1             環境設定のテンプレート（→ config.ps1）
+├── switchbot_secrets.example.ps1  SwitchBot 認証情報のテンプレート
+├── scripts/
+│   ├── buttons/       Companion のボタンから呼ぶ PowerShell スクリプト
+│   ├── lib/           共通部品（Config.ps1 / SendKeyCombo.ps1 / SwitchBot API など）
+│   └── maintenance/   Echo Show の復旧・温湿度の定期更新
+├── echo-show/         Echo Show の /data/adb/ に置く Magisk 起動スクリプト
+├── icons/             自作のボタン用アイコン
+├── webpage/           時計・天気ページ（保留中）
+└── docs/              手順書（GitHub Pages）
+```
+
+詳細は [12 章](docs/12-scripts.md) を参照してください。
 
 ## セットアップ（PC 側だけ）
 
@@ -54,7 +66,7 @@ Copy-Item switchbot_secrets.example.ps1 switchbot_secrets.ps1
 Companion のボタンには次の形式でコマンドを設定します。
 
 ```
-powershell.exe -ExecutionPolicy Bypass -File "C:\path\to\echo-show-streamdeck\volume_up.ps1"
+powershell.exe -ExecutionPolicy Bypass -File "C:\path\to\echo-show-streamdeck\scripts\buttons\volume_up.ps1"
 ```
 
 ## ⚠️ 免責

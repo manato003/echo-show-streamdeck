@@ -3,7 +3,7 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 # Alt(18) + PrintScreen(44)
-& "$PSScriptRoot\SendKeyCombo.ps1" -Keys "18,44"
+& "$PSScriptRoot\..\lib\SendKeyCombo.ps1" -Keys "18,44"
 
 Start-Sleep -Milliseconds 400
 

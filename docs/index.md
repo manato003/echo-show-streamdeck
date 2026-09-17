@@ -37,7 +37,7 @@ nav_order: 1
 │    （全画面でボタン表示）  │  HTTP    │  ─ Discord / ゲーム / etc.    │
 └──────────────────────────┘          └───────────────┬───────────────┘
          ▲                                            │
-         │ ADB (TCP 5555) ─ 保守・復旧用               │ HTTPS
+         │ ADB (USB ケーブル) ─ 保守・復旧用           │ HTTPS
          └────────────────────────────────────────┐   ▼
                                                   │  SwitchBot OpenAPI
 ```
@@ -56,7 +56,7 @@ nav_order: 1
 |---|---|---|
 | 2 | [必要なもの・前提知識]({{ site.baseurl }}/02-prerequisites/) | 機材・ソフト・リスクの確認 |
 | 3 | [Echo Show の root 化]({{ site.baseurl }}/03-rooting/) | amonet-cronos / TWRP / Magisk |
-| 4 | [ADB の常時有効化]({{ site.baseurl }}/04-adb/) | USB / Wi-Fi ADB を OTA に耐える形で固定 |
+| 4 | [ADB の常時有効化]({{ site.baseurl }}/04-adb/) | USB ADB を OTA に耐える形で固定し、Wi-Fi ADB は閉じる（フォールバックあり） |
 | 5 | [Fully Kiosk Browser]({{ site.baseurl }}/05-fully-kiosk/) | 表示アプリの導入と設定 |
 | 6 | [起動時の自動起動]({{ site.baseurl }}/06-autostart/) | 電源投入だけで立ち上がるようにする |
 | 7 | [PC 側：Companion の設定]({{ site.baseurl }}/07-companion/) | エミュレーターとシェル実行の有効化 |
@@ -82,6 +82,7 @@ nav_order: 1
 |---|---|---|
 | `<PC_IP>` | Companion を動かす Windows PC の LAN IP | `192.168.1.30` |
 | `<ECHO_IP>` | Echo Show の LAN IP | `192.168.1.221` |
+| `<ADB_SERIAL>` | `adb devices` で表示される Echo Show のシリアル番号（USB ADB 用） | `G0XXXXXXXXXXXXXX` |
 | `<EMULATOR_ID>` | Companion が生成するエミュレーター（Surface）の ID | `aB3xY9kL2mQ7pR4sT6vW` |
 | `<REPO>` | このリポジトリを置いたローカルパス | `C:\Dev\projects\companion-pc-tools` |
 

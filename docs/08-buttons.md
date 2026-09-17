@@ -8,6 +8,7 @@ nav_order: 8
 すべてのボタンは「Companion の Run shell command → PowerShell スクリプト」という
 同じ形をしています。**追加したい機能があれば `.ps1` を 1 つ書いて割り当てるだけです。**
 
+ボタン用のスクリプトは `scripts/buttons/`、共通部品は `scripts/lib/` にあります。
 各スクリプトの詳細は [12 章 スクリプトリファレンス]({{ site.baseurl }}/12-scripts/) を参照。
 
 ---
@@ -26,10 +27,10 @@ nav_order: 8
 中身は 1 行です。
 
 ```powershell
-& "$PSScriptRoot\SendKeyCombo.ps1" -Keys "175"   # 175 = VK_VOLUME_UP
+& "$PSScriptRoot\..\lib\SendKeyCombo.ps1" -Keys "175"   # 175 = VK_VOLUME_UP
 ```
 
-`SendKeyCombo.ps1` は**共通部品**です。ボタンに直接割り当てないでください。
+`scripts/lib/` の中身は**共通部品**です。ボタンに直接割り当てないでください。
 
 ## 8.2 スクリーンショット
 
@@ -134,7 +135,7 @@ Discord のアンチ自動化挙動と思われます（`LLKHF_INJECTED` フラ�
 
 ### アイコン表示
 
-`discord_mute_state.txt` に `0`/`1` を書いて**ローカルで状態を仮定して管理**しています
+`state/discord_mute_state.txt` に `0`/`1` を書いて**ローカルで状態を仮定して管理**しています
 （Discord に現在のミュート状態を問い合わせる API が存在しないため）。
 仕組みは [8.4]({{ site.baseurl }}/08-buttons/#feedback-variables) と同じで、
 変数名は `discord_mute` です。
@@ -142,7 +143,7 @@ Discord のアンチ自動化挙動と思われます（`LLKHF_INJECTED` フラ�
 {: .warning }
 > ⚠️ **このボタン以外の経路（Discord のマイクアイコンを直接クリックする等）で
 > ミュートを切り替えると、表示と実態がずれます。**
-> もう一度ボタンを押すか、`discord_mute_state.txt` を手で `0` / `1` に書き換えて直します。
+> もう一度ボタンを押すか、`state/discord_mute_state.txt` を手で `0` / `1` に書き換えて直します。
 
 ### それでもダメなときの Plan B
 
@@ -171,7 +172,7 @@ $SwitchBotSecret = "YOUR_SWITCHBOT_SECRET"
 ### デバイス ID を調べる
 
 ```powershell
-. .\SwitchBotApi.ps1
+. .\scripts\lib\SwitchBotApi.ps1
 Get-SwitchBotDevices | ConvertTo-Json -Depth 5
 ```
 
@@ -182,7 +183,7 @@ Get-SwitchBotDevices | ConvertTo-Json -Depth 5
 
 赤外線リモコン経由で照明を ON/OFF します。
 **赤外線には状態を問い合わせる手段がない**ため、Discord ミュートと同じくローカルで状態を仮定し
-（`light_state.txt`）、Companion のカスタム変数 `light_on` に反映しています。
+（`state/light_state.txt`）、Companion のカスタム変数 `light_on` に反映しています。
 
 デバイス ID は `config.ps1` の `$SwitchBotLightDeviceId` から読まれます。
 
@@ -192,7 +193,7 @@ SwitchBot 温湿度計から温度・湿度・バッテリーを取得し、
 Companion のカスタム変数 `switchbot_temperature` / `switchbot_humidity` / `switchbot_battery` に
 POST します。ボタンのテキストに `$(custom:switchbot_temperature)` と書けば表示されます。
 
-**定期実行**：タスクスケジューラに `run_hidden_switchbot.vbs` を登録します
+**定期実行**：タスクスケジューラに `scripts/maintenance/run_hidden_switchbot.vbs` を登録します
 （コンソールウィンドウを出さないためのラッパーです）。
 スクリプトの場所は自動で解決されるので、パスを書き換える必要はありません。
 
@@ -204,7 +205,7 @@ POST します。ボタンのテキストに `$(custom:switchbot_temperature)` �
 
 ## 8.7 アイコンについて
 
-リポジトリ同梱のアイコン（`*.ico.png`）は **GDI+ のプリミティブ描画で自作したもの**で、
+リポジトリ同梱のアイコン（`icons/`）は **GDI+ のプリミティブ描画で自作したもの**で、
 配布物からのダウンロード品ではありません。自由に使えます。
 
 Companion 側の `Image Library` にアップロードし、ボタンの PNG として指定します。

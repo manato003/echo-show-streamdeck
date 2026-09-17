@@ -27,23 +27,20 @@ nav_order: 9
 |---|---|
 | **画面が真っ白 / エラーページ / 別のページ** | PC の Companion が起動しているか。していれば Echo Show 側を再起動（電源抜き差し）するのが一番早い |
 | **ボタンは光るが PC が反応しない** | Companion の [Shell command support]({{ site.baseurl }}/07-companion/#shell-command-support) が無効に戻っていないか |
-| **ADB で繋がらない・root が効かない** | OTA アップデートで root が飛んだ疑い（→ [10 章]({{ site.baseurl }}/10-troubleshooting/#ota-root-loss)） |
+| **ADB で繋がらない（`adb devices` に出ない）・root が効かない** | OTA アップデートで root が飛んだ疑い。USB が "Fire"（WPD）として認識されていれば確定（→ [10 章]({{ site.baseurl }}/10-troubleshooting/#ota-root-loss)） |
 
 ## 9.4 手動での復旧コマンド
 
 表示ページが狂ったときに、**最も確実に正しいページへ戻す**手段です。PC の PowerShell から実行します。
 
 ```
-adb -s <ECHO_IP>:5555 shell am start -a android.intent.action.VIEW -d 'http://<PC_IP>:8000/emulator/<EMULATOR_ID>' -n de.ozerov.fully/de.ozerov.fully.FullyActivity
+adb -s <ADB_SERIAL> shell am start -a android.intent.action.VIEW -d 'http://<PC_IP>:8000/emulator/<EMULATOR_ID>' -n de.ozerov.fully/de.ozerov.fully.FullyActivity
 ```
 
-未接続なら先に：
+`<ADB_SERIAL>` は `adb devices` で表示されるシリアル番号です。表示されない場合は USB ケーブルを確認してください。
+USB が使えないときは Wi-Fi ADB に切り替えられます（→ [4.4 フォールバック]({{ site.baseurl }}/04-adb/#wifi-fallback)）。
 
-```
-adb connect <ECHO_IP>:5555
-```
-
-強制的に再起動したい場合はリポジトリの `restart_echoshow_kiosk.bat` を使います
+強制的に再起動したい場合はリポジトリの `scripts/maintenance/restart_echoshow_kiosk.bat` を使います
 （→ [6.3]({{ site.baseurl }}/06-autostart/#restart-bat)）。
 
 ## 9.5 状態表示がずれたとき
@@ -53,5 +50,5 @@ Discord ミュートと照明のアイコンは**ローカルで状態を仮定�
 
 | 対象 | 直し方 |
 |---|---|
-| Discord ミュート | もう一度ボタンを押すか、`discord_mute_state.txt` を手で `0` / `1` に書き換える |
-| 照明 | もう一度ボタンを押すか、`light_state.txt` を書き換える |
+| Discord ミュート | もう一度ボタンを押すか、`state/discord_mute_state.txt` を手で `0` / `1` に書き換える |
+| 照明 | もう一度ボタンを押すか、`state/light_state.txt` を書き換える |

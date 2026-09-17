@@ -67,8 +67,9 @@ Fully Kiosk の Remote Admin `loadUrl` コマンドを呼んで
 
 | 項目 | 状況 |
 |---|---|
-| Fire OS の OTA 自動更新の無効化 | **未対応。root が再び飛ぶリスクあり。要検討** |
+| Fire OS の OTA 自動更新の無効化 | **対応済み（2026-09-17）**。2 回目の事故を受けて更新アプリ 2 つを `pm disable`（→ [手順]({{ site.baseurl }}/10-troubleshooting/#disable-ota)） |
 | Echo Show / PC の DHCP 予約 | **未対応。推奨。IP が変わると Start URL が壊れる** |
+| USB ADB への一本化 | **対応済み（2026-09-17）**。Fire OS が `adb_enabled` を戻す動作と、純正 `init.cronos.rc` が 5555 番を開ける動作を起動スクリプトで打ち消し、Wi-Fi ADB は閉じた（→ [4.3]({{ site.baseurl }}/04-adb/#usb-only)） |
 | Kiosk PIN（`1234`）の変更 | 未変更。Kiosk Mode が OFF の間は実害なし |
 | ボタンの表示サイズ拡大 | 未実施。Fully Kiosk の Page Zoom で対応可能 |
 | Fully Kiosk の "Launch on Boot" が実効しているか | **要確認。Magisk スクリプト単独で足りている可能性が高い** |

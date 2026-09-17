@@ -4,13 +4,12 @@ switchbot_secrets.ps1
 # Local environment settings (copy config.example.ps1 to create)
 config.ps1
 
-# Author's personal build log - contains real IPs, paths and device ids.
-# The shareable version of it lives in docs/.
-MANUAL.md
+# Author's private notes (e.g. MANUAL.md, the original build log with real IPs,
+# paths and device ids). The shareable version lives in docs/.
+private/
 
 # Runtime state written by the toggle scripts
-discord_mute_state.txt
-light_state.txt
+state/
 
 # Jekyll build output (docs site)
 docs/_site/
